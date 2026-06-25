@@ -43,3 +43,6 @@ next-env.d.ts
 # AI agent instructions (local dev tooling, not part of the project)
 CLAUDE.md
 AGENTS.md
+/*.png
+/*.jpg
+/*.jpeg
