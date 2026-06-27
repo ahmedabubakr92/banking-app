@@ -47,3 +47,5 @@ MEMORY.md
 /*.png
 /*.jpg
 /*.jpeg
+
+/lib/generated/prisma
