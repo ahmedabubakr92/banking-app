@@ -17,7 +17,7 @@ export default function SignIn() {
   });
 
   function onSubmit(data: SignInFormData) {
-    console.log("Sign in data:", data);
+      // TODO: POST to /api/auth/sign-in
   }
 
   return (
@@ -58,6 +58,7 @@ export default function SignIn() {
               id="email"
               type="email"
               placeholder="Enter your email"
+              autoComplete="email"
               {...register("email")}
               className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -77,6 +78,7 @@ export default function SignIn() {
               id="password"
               type="password"
               placeholder="Enter your password"
+              autoComplete="current-password"
               {...register("password")}
               className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />

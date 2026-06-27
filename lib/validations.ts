@@ -65,9 +65,18 @@ export const signUpSchema = z.object({
     nationality: z.string().min(1, "Nationality is required"),
     city: z.string().min(1, "City is required"),
     address: z.string().min(1, "Address is required"),
-    dob: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, "Date of birth must be in YYYY-MM-DD format"),
+    dob: z.string().refine((value) => {
+        const date = new Date(`${value}T00:00:00.000Z`);
+        if (
+            Number.isNaN(date.getTime()) || 
+            date.toISOString().slice(0, 10) !== value ||
+            date > new Date()
+        ) return false;
+
+        const age = new Date().getFullYear() - date.getFullYear()
+        return age >= 18 && age <= 120;
+
+    }, "Enter a valid date. You must be between 18 and 120 years old"),
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"]

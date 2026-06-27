@@ -17,10 +17,11 @@ export default function SignUp() {
   });
 
   function onSubmit(data: SignUpFormData) {
-    console.log("Sign up data:", data);
+    // TODO: POST to /api/auth/sign-up
   }
+
   return (
-    <section className="min-h-dvh flex flex-1 flex-col justify-center items-center gap-10">
+    <section className="flex flex-1 flex-col justify-center items-center gap-10">
       <Link href="/" className="w-full max-w-115 flex items-center gap-[3.5px]">
         <Image
           src="/icons/logo.svg"
@@ -43,8 +44,8 @@ export default function SignUp() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
           {/* First Name & Last Name */}
-          <div className="flex flex-1 gap-4.5">
-            <div className="flex flex-col gap-1.5">
+          <div className="flex gap-4.5">
+            <div className="flex flex-col gap-1.5 flex-1">
               <label
                 htmlFor="firstName"
                 className="text-sm font-medium text-gray-700"
@@ -64,7 +65,7 @@ export default function SignUp() {
                 </p>
               )}
             </div>
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-1.5 flex-1">
               <label
                 htmlFor="lastName"
                 className="text-sm font-medium text-gray-700"
@@ -85,28 +86,91 @@ export default function SignUp() {
               )}
             </div>
           </div>
-          {/* Addres */}
+
+          {/* Date of Birth & Nationality */}
+          <div className="flex gap-4.5">
+            <div className="flex flex-col gap-1.5 flex-1">
+              <label
+                htmlFor="dob"
+                className="text-sm font-medium text-gray-700"
+              >
+                Date of Birth
+              </label>
+              <input
+                id="dob"
+                type="date"
+                {...register("dob")}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.dob && (
+                <p className="text-xs text-red-500">{errors.dob.message}</p>
+              )}
+            </div>
+            <div className="flex flex-col gap-1.5 flex-1">
+              <label
+                htmlFor="nationality"
+                className="text-sm font-medium text-gray-700"
+              >
+                Nationality
+              </label>
+              <input
+                id="nationality"
+                type="text"
+                placeholder="ex: Sudanese"
+                {...register("nationality")}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.nationality && (
+                <p className="text-xs text-red-500">
+                  {errors.nationality.message}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Emirates ID */}
           <div className="flex flex-col gap-1.5">
             <label
-              htmlFor="address"
+              htmlFor="emiratesId"
               className="text-sm font-medium text-gray-700"
             >
-              Address
+              Emirates ID
             </label>
             <input
-              id="address"
+              id="emiratesId"
               type="text"
-              placeholder="ex: Flat 1402, Marina Heights Tower, Dubai Marina"
-              {...register("address")}
+              placeholder="784-YYYY-NNNNNNN-C"
+              {...register("emiratesId")}
               className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            {errors.address && (
-              <p className="text-xs text-red-500">{errors.address.message}</p>
+            {errors.emiratesId && (
+              <p className="text-xs text-red-500">
+                {errors.emiratesId.message}
+              </p>
             )}
           </div>
-          {/* City + Nationality */}
+
+          {/* Address & City */}
           <div className="flex gap-4.5">
-            <div className="flex flex-1 flex-col gap-1.5">
+            <div className="flex flex-col gap-1.5 flex-1">
+              <label
+                htmlFor="address"
+                className="text-sm font-medium text-gray-700"
+              >
+                Address
+              </label>
+              <input
+                id="address"
+                type="text"
+                placeholder="ex: Flat 1402, Marina Heights Tower"
+                {...register("address")}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.address && (
+                <p className="text-xs text-red-500">{errors.address.message}</p>
+              )}
+            </div>
+            <div className="flex flex-col gap-1.5 flex-1">
               <label
                 htmlFor="city"
                 className="text-sm font-medium text-gray-700"
@@ -124,105 +188,51 @@ export default function SignUp() {
                 <p className="text-xs text-red-500">{errors.city.message}</p>
               )}
             </div>
-            <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="nationality"
-                className="text-sm font-medium text-gray-700"
-              >
-                Nationality
-              </label>
-              <input
-                id="nationality"
-                type="text"
-                placeholder="ex: Sudan"
-                {...register("nationality")}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              {errors.nationality && (
-                <p className="text-xs text-red-500">
-                  {errors.nationality.message}
-                </p>
-              )}
-            </div>
           </div>
-          {/* Date of Birth & Emirates ID */}
+
+          {/* Phone Number & Email */}
           <div className="flex gap-4.5">
-            <div className="flex flex-1 flex-col gap-1.5">
+            <div className="flex flex-col gap-1.5 flex-1">
               <label
-                htmlFor="dob"
+                htmlFor="phoneNumber"
                 className="text-sm font-medium text-gray-700"
               >
-                Date of Birth
+                Phone Number
               </label>
               <input
-                id="dob"
-                type="date"
-                {...register("dob")}
+                id="phoneNumber"
+                type="tel"
+                placeholder="+971 50 123 4567"
+                {...register("phoneNumber")}
                 className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              {errors.dob && (
-                <p className="text-xs text-red-500">{errors.dob.message}</p>
-              )}
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="emiratesId"
-                className="text-sm font-medium text-gray-700"
-              >
-                Emirates ID
-              </label>
-              <input
-                id="emiratesId"
-                type="text"
-                placeholder="784-YYYY-NNNNNNN-C"
-                {...register("emiratesId")}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              {errors.emiratesId && (
+              {errors.phoneNumber && (
                 <p className="text-xs text-red-500">
-                  {errors.emiratesId.message}
+                  {errors.phoneNumber.message}
                 </p>
               )}
             </div>
+            <div className="flex flex-col gap-1.5 flex-1">
+              <label
+                htmlFor="email"
+                className="text-sm font-medium text-gray-700"
+              >
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                placeholder="ex: ahmed@example.com"
+                autoComplete="email"
+                {...register("email")}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.email && (
+                <p className="text-xs text-red-500">{errors.email.message}</p>
+              )}
+            </div>
           </div>
-          {/* Phone Number */}
-          <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="phoneNumber"
-              className="text-sm font-medium text-gray-700"
-            >
-              Phone Number
-            </label>
-            <input
-              id="phoneNumber"
-              type="tel"
-              placeholder="ex: +971 50 1234567"
-              {...register("phoneNumber")}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            {errors.phoneNumber && (
-              <p className="text-xs text-red-500">{errors.phoneNumber.message}</p>
-            )}
-          </div>
-          {/* Email */}
-          <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="email"
-              className="text-sm font-medium text-gray-700"
-            >
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              placeholder="ex: ahmed@example.com"
-              {...register("email")}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            {errors.email && (
-              <p className="text-xs text-red-500">{errors.email.message}</p>
-            )}
-          </div>
+
           {/* Password */}
           <div className="flex flex-col gap-1.5">
             <label
@@ -235,6 +245,7 @@ export default function SignUp() {
               id="password"
               type="password"
               placeholder="Enter your password"
+              autoComplete="new-password"
               {...register("password")}
               className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -242,6 +253,7 @@ export default function SignUp() {
               <p className="text-xs text-red-500">{errors.password.message}</p>
             )}
           </div>
+
           {/* Confirm Password */}
           <div className="flex flex-col gap-1.5">
             <label
@@ -252,8 +264,9 @@ export default function SignUp() {
             </label>
             <input
               id="confirmPassword"
-              type="confirmPassword"
+              type="password"
               placeholder="Confirm your password"
+              autoComplete="new-password"
               {...register("confirmPassword")}
               className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -267,18 +280,15 @@ export default function SignUp() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="h-11 w-full rounded-lg sidebar-active-gradient font-sans font-semibold text-base leading-6 text-white disabled:opacity-50"
+            className="mt-1 h-11 w-full rounded-lg sidebar-active-gradient font-sans font-semibold text-base leading-6 text-white disabled:opacity-50"
           >
             {isSubmitting ? "Creating account..." : "Sign up"}
           </button>
         </form>
-
       </div>
+
       <p className="text-sm text-gray-600">
-        Already have an account? {" "}
-        <Link href="/sign-in" className="font-semibold text-blue-500  hover:underline">
-        Login
-        </Link>
+        Already have an account? <Link href="/sign-in">Login</Link>
       </p>
     </section>
   );
