@@ -33,10 +33,12 @@ export const signUpSchema = z
   .object({
     firstName: z
       .string()
+      .trim()
       .min(2, "First name must be at least 2 characters")
       .max(50, "First name must be 50 characters or less"),
     lastName: z
       .string()
+      .trim()
       .min(2, "Last name must be at least 2 characters")
       .max(50, "Last name must be 50 characters or less"),
     email: z.string().email("Please enter a valid email address").toLowerCase(),
@@ -68,19 +70,26 @@ export const signUpSchema = z
         const digits = val.replace(/-/g, "");
         return validateLuhn(digits);
       }, "Invalid Emirates ID"),
-    nationality: z.string().min(1, "Nationality is required"),
-    city: z.string().min(1, "City is required"),
-    address: z.string().min(1, "Address is required"),
+    nationality: z.string().trim().min(1, "Nationality is required"),
+    city: z.string().trim().min(1, "City is required"),
+    address: z.string().trim().min(1, "Address is required"),
     dob: z.string().refine((value) => {
       const date = new Date(`${value}T00:00:00.000Z`);
+      const today = new Date();
       if (
         Number.isNaN(date.getTime()) ||
         date.toISOString().slice(0, 10) !== value ||
-        date > new Date()
+        date > today
       )
         return false;
 
-      const age = new Date().getFullYear() - date.getFullYear();
+      let age = today.getUTCFullYear() - date.getUTCFullYear();
+      const hasHadBirthday =
+        today.getUTCMonth() > date.getUTCMonth() ||
+        (today.getUTCMonth() === date.getUTCMonth() &&
+          today.getUTCDate() >= date.getUTCDate());
+
+      if (!hasHadBirthday) age--;
       return age >= 18 && age <= 120;
     }, "Enter a valid date. You must be between 18 and 120 years old"),
   })
