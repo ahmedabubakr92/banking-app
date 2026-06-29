@@ -25,7 +25,8 @@ model User {
   email     String      @unique 
   passwordHash      String 
   phoneNumber     String      @unique 
-  emiratesId      String      @unique 
+  emiratesId      String       
+  emiratesIdHash      String      @unique 
   nationality     String 
   city      String
   address     String 
