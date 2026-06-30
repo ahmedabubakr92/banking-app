@@ -5,8 +5,16 @@ import jwt from "jsonwebtoken";
 import { prisma } from "@/lib/db";
 import { signInSchema } from "@/lib/validations";
 
+const DUMMY_HASH =
+  "$2b$12$aTwlr/Gvw3CK6ZrIzwP9LOb/M6fGwYblBv3kIzSnhbcrhgmlIJApG";
+
 export async function POST(request: NextRequest) {
-  const body = await request.json();
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    return Response.json({ error: "Invalid request body" }, { status: 400 });
+  }
 
   const result = signInSchema.safeParse(body);
   if (!result.success) {
@@ -19,15 +27,12 @@ export async function POST(request: NextRequest) {
   const { email, password } = result.data;
 
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) {
-    return Response.json(
-      { error: "Invalid email or password" },
-      { status: 401 },
-    );
-  }
 
-  const passwordMatch = await bcrypt.compare(password, user.passwordHash);
-  if (!passwordMatch) {
+  const passwordMatch = await bcrypt.compare(
+    password,
+    user?.passwordHash ?? DUMMY_HASH,
+  );
+  if (!user || !passwordMatch) {
     return Response.json(
       { error: "Invalid email or password" },
       { status: 401 },
@@ -35,7 +40,7 @@ export async function POST(request: NextRequest) {
   }
 
   const token = jwt.sign(
-    { userId: user.id, email: user.email, kycStatus: user.kycStatus },
+    { userId: user.id, kycStatus: user.kycStatus },
     process.env.JWT_SECRET!,
     { expiresIn: "1h" },
   );

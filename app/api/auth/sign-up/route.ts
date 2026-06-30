@@ -3,11 +3,18 @@ import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { prisma } from "@/lib/db";
+import { Prisma } from "@/lib/generated/prisma/client";
 import { encrypt, hashForLookup } from "@/lib/encryption";
 import { signUpSchema } from "@/lib/validations";
 
 export async function POST(request: NextRequest) {
-  const body = await request.json();
+  let body: unknown;
+
+  try {
+    body = await request.json();
+  } catch {
+    return Response.json({ error: "Invalid request body" }, { status: 400 });
+  }
 
   const result = signUpSchema.safeParse(body);
   if (!result.success) {
@@ -48,24 +55,38 @@ export async function POST(request: NextRequest) {
   const passwordHash = await bcrypt.hash(password, 12);
   const encryptedEmiratesId = encrypt(emiratesId);
 
-  const user = await prisma.user.create({
-    data: {
-      firstName,
-      lastName,
-      email,
-      passwordHash,
-      phoneNumber,
-      emiratesId: encryptedEmiratesId,
-      emiratesIdHash,
-      nationality,
-      city,
-      address,
-      dob: new Date(`${dob}T00:00:00.000Z`),
-    },
-  });
+  let user;
+  try {
+    user = await prisma.user.create({
+      data: {
+        firstName,
+        lastName,
+        email,
+        passwordHash,
+        phoneNumber,
+        emiratesId: encryptedEmiratesId,
+        emiratesIdHash,
+        nationality,
+        city,
+        address,
+        dob: new Date(`${dob}T00:00:00.000Z`),
+      },
+    });
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      return Response.json(
+        { error: "Account with these details already exists" },
+        { status: 409 },
+      );
+    }
+    throw error;
+  }
 
   const token = jwt.sign(
-    { userId: user.id, email: user.email, kycStatus: user.kycStatus },
+    { userId: user.id, kycStatus: user.kycStatus },
     process.env.JWT_SECRET!,
     { expiresIn: "1h" },
   );
