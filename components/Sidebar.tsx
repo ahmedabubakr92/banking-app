@@ -5,9 +5,18 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { sidebarLinks } from "@/constants";
 import { LogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function SideBar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  async function handleSignOut() {
+    await fetch("/api/auth/sign-out", {
+      method: "POST",
+    });
+    router.replace("/sign-in");
+  }
 
   return (
     <section className="flex flex-col shrink-0 w-70 h-screen bg-white border-r border-gray-200 px-4 py-6">
@@ -27,7 +36,8 @@ export default function SideBar() {
           const isActive =
             item.route === "/"
               ? pathname === "/"
-              : pathname === item.route || pathname.startsWith(`${item.route}/`);
+              : pathname === item.route ||
+                pathname.startsWith(`${item.route}/`);
           return (
             <Link
               href={item.route}
@@ -49,7 +59,7 @@ export default function SideBar() {
         })}
       </nav>
       <div className="mt-auto min-h-24 flex items-center gap-3 px-3 pt-4 border-t border-gray-200">
-        <Image 
+        <Image
           src="/profile.jpeg"
           alt="Ahmed's profile"
           width={40}
@@ -57,10 +67,16 @@ export default function SideBar() {
           className="rounded-full"
         />
         <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold font-sans leading-5 text-gray-700 truncate">Ahmed Abubakr</p>
-            <p className="text-sm leading-5 text-gray-600 truncate">ahmedabubakr92@gmail.com</p>
+          <p className="text-sm font-semibold font-sans leading-5 text-gray-700 truncate">
+            Ahmed Abubakr
+          </p>
+          <p className="text-sm leading-5 text-gray-600 truncate">
+            ahmedabubakr92@gmail.com
+          </p>
         </div>
-        <LogOut width={16} height={16} className="ml-auto shrink-0 text-gray-600"/>
+        <button onClick={handleSignOut} className="ml-auto shrink-0 text-gray-600 hover:text-red-500 transition-colors cursor-pointer">
+          <LogOut width={16} height={16} />
+        </button>
       </div>
     </section>
   );
