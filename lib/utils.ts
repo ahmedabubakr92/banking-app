@@ -10,6 +10,7 @@ export function toErrorMessage(
   fallback = "Something went wrong",
 ): string {
   if (typeof error === "string") return error;
+  if (error instanceof Error) return error.message;
   if (error && typeof error === "object") {
     const first = Object.values(error).flat()[0];
     if (typeof first === "string") return first;
