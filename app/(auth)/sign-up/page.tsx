@@ -6,18 +6,39 @@ import { useForm } from "react-hook-form";
 import { signUpSchema } from "@/lib/validations";
 import { SignUpFormData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { toErrorMessage } from "@/lib/utils";
 
 export default function SignUp() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
   });
 
-  function onSubmit(data: SignUpFormData) {
-    // TODO: POST to /api/auth/sign-up
+  async function onSubmit(data: SignUpFormData) {
+    try {
+      const response = await fetch("/api/auth/sign-up", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        router.replace("/");
+        return;
+      }
+
+      const json = await response.json().catch(() => ({}));
+      setError("root", { message: toErrorMessage(json?.error) });
+    } catch {
+      setError("root", { message: "Something went wrong. Please try again." });
+    }
   }
 
   return (
@@ -276,6 +297,10 @@ export default function SignUp() {
               </p>
             )}
           </div>
+
+          {errors.root && (
+            <p className="text-sm text-red-500">{errors.root.message}</p>
+          )}
 
           <button
             type="submit"

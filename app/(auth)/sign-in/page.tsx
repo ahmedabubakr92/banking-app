@@ -6,23 +6,43 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signInSchema } from "@/lib/validations";
 import { SignInFormData } from "@/types";
+import { useRouter } from "next/navigation";
+import { toErrorMessage } from "@/lib/utils";
 
 export default function SignIn() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
   });
 
-  function onSubmit(data: SignInFormData) {
-      // TODO: POST to /api/auth/sign-in
+  async function onSubmit(data: SignInFormData) {
+    try {
+      const response = await fetch("/api/auth/sign-in", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        router.replace("/");
+        return;
+      }
+
+      const json = await response.json().catch(() => ({}));
+      setError("root", { message: toErrorMessage(json?.error) });
+    } catch {
+      setError("root", { message: "Something went wrong. Please try again." });
+    }
   }
 
   return (
     <>
-        
       <Link href="/" className="w-full max-w-90 flex items-center gap-[3.5px]">
         <Image
           src="/icons/logo.svg"
@@ -43,10 +63,7 @@ export default function SignIn() {
           </p>
         </div>
 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-4"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <label
               htmlFor="email"
@@ -86,6 +103,10 @@ export default function SignIn() {
               <p className="text-xs text-red-500">{errors.password.message}</p>
             )}
           </div>
+
+          {errors.root && (
+            <p className="text-sm text-red-500">{errors.root.message}</p>
+          )}
 
           <button
             type="submit"
