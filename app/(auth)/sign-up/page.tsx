@@ -7,6 +7,7 @@ import { signUpSchema } from "@/lib/validations";
 import { SignUpFormData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { toErrorMessage } from "@/lib/utils";
 
 export default function SignUp() {
   const router = useRouter();
@@ -21,19 +22,23 @@ export default function SignUp() {
   });
 
   async function onSubmit(data: SignUpFormData) {
-    const response = await fetch("/api/auth/sign-up", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+    try {
+      const response = await fetch("/api/auth/sign-up", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-    if (response.ok) {
-      router.replace("/");
-      return;
+      if (response.ok) {
+        router.replace("/");
+        return;
+      }
+
+      const json = await response.json().catch(() => ({}));
+      setError("root", { message: toErrorMessage(json?.error) });
+    } catch {
+      setError("root", { message: "Something went wrong. Please try again." });
     }
-
-    const json = await response.json();
-    setError("root", {message: json.error ?? "Something went wrong"})
   }
 
   return (

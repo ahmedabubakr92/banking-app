@@ -12,10 +12,11 @@ export default function SideBar() {
   const router = useRouter();
 
   async function handleSignOut() {
-    await fetch("/api/auth/sign-out", {
-      method: "POST",
-    });
-    router.replace("/sign-in");
+    try {
+      await fetch("/api/auth/sign-out", { method: "POST" });
+    } finally {
+      router.replace("/sign-in");
+    }
   }
 
   return (
@@ -74,7 +75,10 @@ export default function SideBar() {
             ahmedabubakr92@gmail.com
           </p>
         </div>
-        <button onClick={handleSignOut} className="ml-auto shrink-0 text-gray-600 hover:text-red-500 transition-colors cursor-pointer">
+        <button
+          onClick={handleSignOut}
+          className="ml-auto shrink-0 text-gray-600 hover:text-red-500 transition-colors cursor-pointer"
+        >
           <LogOut width={16} height={16} />
         </button>
       </div>
