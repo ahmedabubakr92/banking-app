@@ -34,7 +34,18 @@ export default function RecentTransactions({ accounts, transactions }: Props) {
 
   const filtered = transactions.filter((t) => t.bankAccountId === selectedId);
 
-  const selectedAccount = accounts.find((acc) => acc.id === selectedId)!;
+  const selectedAccount = accounts.find((acc) => acc.id === selectedId);
+
+  if (!selectedAccount) {
+    return (
+      <section className="flex flex-col gap-7.5">
+        <h2 className="text-2xl font-semibold text-gray-900">
+          Recent Transactions
+        </h2>
+        <p className="text-sm text-gray-600">No linked accounts yet.</p>
+      </section>
+    );
+  }
 
   return (
     <section className="flex flex-col gap-7.5">

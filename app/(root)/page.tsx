@@ -3,6 +3,7 @@ import RecentTransactions from "@/components/RecentTransactions";
 import RightSidebar from "@/components/RightSidebar";
 import { mockAccounts, mockTransactions } from "@/lib/mock-data";
 import { formatAmount } from "@/lib/utils";
+import Link from "next/link";
 
 export default function Home() {
   const totalBalance = mockAccounts.reduce((sum, acc) => sum + acc.balance, 0);
@@ -27,10 +28,12 @@ export default function Home() {
           </div>
           <div className="flex-1 flex flex-col gap-3">
             <div className="flex justify-between items-center">
-              <p className="text-gray-900 font-semibold">2 Bank Accounts</p>
-              <button className="text-sm font-medium text-[#0179FE]">
+              <p className="text-gray-900 font-semibold">
+                {mockAccounts.length} Bank Account{mockAccounts.length !== 1 ? "s" : ""}
+              </p>
+              <Link href="/connect-bank" className="text-sm font-medium text-[#0179FE]">
                 + Add bank
-              </button>
+              </Link>
             </div>
             <p className="text-sm text-gray-600">Total Current Balance</p>
             <p className="text-3xl font-bold text-gray-900">
