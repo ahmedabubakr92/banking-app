@@ -50,3 +50,12 @@ export function countSpendingByCategory(
     .map(([name, total]) => ({ name, total }))
     .sort((a, b) => b.total - a.total);
 }
+
+export function getAccountSpending(
+  accountId: string,
+  transactions: {bankAccountId: string; amount: number; status?: "Declined"}[]
+): number {
+  return transactions
+    .filter((tx) => tx.bankAccountId === accountId && tx.amount < 0 && tx.status !== "Declined")
+    .reduce((sum, tx) => sum + Math.abs(tx.amount), 0)
+}

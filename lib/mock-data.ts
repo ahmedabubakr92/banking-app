@@ -7,7 +7,8 @@ export const mockAccounts = [
     balance: 2588.12,
     lastFourDigits: "1234",
     chartColor: "#0179FE",
-    type: "savings"
+    type: "savings",
+    monthlyBudget: 1000
   },
   {
     id: "acc-002",
@@ -15,7 +16,8 @@ export const mockAccounts = [
     balance: 110.0,
     lastFourDigits: "5678",
     chartColor: "#E52E6B",
-    type: "current"
+    type: "current",
+    monthlyBudget: 800
   },
 ];
 
