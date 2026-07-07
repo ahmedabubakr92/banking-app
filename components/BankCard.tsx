@@ -1,4 +1,5 @@
 import { formatAmount } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 type Props = {
   account: {
@@ -8,6 +9,7 @@ type Props = {
     chartColor: string;
   };
   userName: string;
+  className?: string;
 };
 
 function PaypassIcon({ className }: { className?: string }) {
@@ -54,12 +56,13 @@ function MastercardLogo() {
   );
 }
 
-export default function BankCard({ account, userName }: Props) {
+export default function BankCard({ account, userName, className }: Props) {
   return (
     <div
-      className="relative w-[270px] h-[162px] overflow-hidden rounded-2xl p-4 flex flex-col justify-between shrink-0
-        before:pointer-events-none before:absolute before:inset-0 before:z-10
-        before:rounded-[inherit] before:ring-1 before:ring-white/30 before:ring-inset"
+      className={cn(
+        "relative w-[302px] h-[182px] overflow-hidden rounded-2xl p-4 flex flex-col justify-between shrink-0 before:pointer-events-none before:absolute before:inset-0 before:z-10 before:rounded-[inherit] before:ring-1 before:ring-white/30 before:ring-inset",
+        className,
+      )}
       style={{
         background: `linear-gradient(to top right, color-mix(in srgb, ${account?.chartColor} 60%, black), ${account?.chartColor})`,
         boxShadow: "8px 10px 16px 0px #0000000D",
