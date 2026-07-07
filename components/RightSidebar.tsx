@@ -59,13 +59,21 @@ export default function RightSidebar() {
           </Link>
         </div>
 
-        <div className="relative w-70 mx-auto" style={{ height: "214px" }}>
+        <div className="relative w-70 mx-auto" style={{ height: "194px" }}>
           <div className="relative z-10">
-            <BankCard account={accounts[0]} userName={userName} className="w-[270px] h-[162px]"/>
+            <BankCard
+              account={accounts[0]}
+              userName={userName}
+              className="w-[270px] h-[162px]"
+            />
           </div>
           {accounts[1] && (
             <div className="absolute right-0 top-8 z-0 w-[90%]">
-              <BankCard account={accounts[1]} userName={userName} className="w-[270px] h-[162px]"/>
+              <BankCard
+                account={accounts[1]}
+                userName={userName}
+                className="w-[270px] h-[162px]"
+              />
             </div>
           )}
         </div>
