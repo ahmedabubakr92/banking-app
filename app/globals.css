@@ -45,7 +45,7 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
-  --color-sidebar-active: #0179FE;
+  --color-sidebar-active: #0179fe;
 }
 
 :root {
@@ -81,7 +81,6 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  
 }
 
 .dark {
@@ -131,6 +130,21 @@
 }
 
 @utility sidebar-active-gradient {
-  background: linear-gradient(90deg, #0179FE 0%, #4893FF 100%);
+  background: linear-gradient(90deg, #0179fe 0%, #4893ff 100%);
 }
 
+@utility gradient-text {
+  background: linear-gradient(90deg, #0179fe 0%, #4893ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+@utility tab-active-border {
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  border-bottom: 3px solid;
+  border-image: linear-gradient(90deg, #0179FE 0%, #4893FF 100%) 1;
+}
